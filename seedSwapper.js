@@ -76,7 +76,7 @@ async function getNextSeed(vidLink) {
         }
         seedNo = availableSeedArray[seedArrayCurrentPosition];
     }
-    return getSeedSourceFromSeedNo(seedNo);
+    return getSeedSourceFromSeedNo(seedNo, vidLink);
 }
 
 var seedIsValidFromLoop = false;
