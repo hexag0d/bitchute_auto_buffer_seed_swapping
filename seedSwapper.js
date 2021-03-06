@@ -62,13 +62,13 @@ var availableSeedArray = [
 // get a random seed so that we're not overloading any single one
 var seedArrayCurrentPosition = Math.floor(Math.random(availableSeedArray.length) * 10);
 
-function getSeedSourceFromSeedNo(seedNo) {
+function getSeedSourceFromSeedNo(seedNo, vidLink) {
     return 'https://' + seedNo + '.bitchute.com/' + vidLink;
 }
 
 async function getNextSeed(vidLink) {
     var seedNo = availableSeedArray[seedArrayCurrentPosition];
-    while (getHtmlPageSeed() === getSeedSourceFromSeedNo(seedNo)) {
+    while (getHtmlPageSeed() === getSeedSourceFromSeedNo(seedNo, vidLink)) {
         if (seedArrayCurrentPosition < (availableSeedArray.length - 1)) {
             seedArrayCurrentPosition++; // add one to try next seed
         } else {
