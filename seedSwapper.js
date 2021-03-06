@@ -90,8 +90,8 @@ var seedToSwapInto = undefined;
 seedValidationHandle = undefined;
 
 async function validateSeedLoop() {
-    seedIsValidating = true;
     if (!seedIsValidating) {
+        seedIsValidating = true;
         var newSeed = await getNextSeed(getHtmlPageVidLink());
         seedSwapAttempts++;
         seedIsValidFromLoop = await verifySeedIsValid(newSeed);
@@ -100,12 +100,13 @@ async function validateSeedLoop() {
             setHtmlPageSeed(seedToSwapInto);
             plyr.play();
             seedSwapAttempts = 0;
+            clearInterval(seedValidationHandle);
         } else if (seedSwapAttempts >= 8) {
             console.log('attempted to swap seed 8 times and failed, aborting');
             plyr.pause();
             seedSwapAttempts = 0;
+            clearInterval(seedValidationHandle);
         }
-        clearInterval(seedValidationHandle);
         seedIsValidating = false;
     }
 }
