@@ -106,13 +106,14 @@ async function runOnInterval() {
                 if (!seedSwapInProgress) {
                     seedSwapInProgress = true;
                     seedIsValidFromLoop = await verifySeedIsValid(getHtmlPageSeed());
-                    while (!seedIsValidFromLoop && (seedSwapAttempts < 7)) {
+                    while (!seedIsValidFromLoop && (seedSwapAttempts < 8)) {
                         if (!seedIsValidating) {
                             setTimeout(validateSeedLoop, 1500);
                         }
                     }
-                    if (seedSwapAttempts >= 7) {
-                        console.log('attempted to swap seed 7 times and failed, aborting');
+                    if (seedSwapAttempts >= 8) {
+                        console.log('attempted to swap seed 8 times and failed, aborting');
+                        plyr.pause();
                     }
                     if (seedIsValidFromLoop && seedToSwapInto != undefined) {
                         setHtmlPageSeed(seedToSwapInto);
