@@ -108,6 +108,7 @@ async function validateSeedLoop() {
             clearInterval(seedValidationHandle);
         }
         seedIsValidating = false;
+        seedSwapInProgress = false;
     }
 }
 
