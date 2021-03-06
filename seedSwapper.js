@@ -87,15 +87,27 @@ var seedIsValidating = false;
 
 var seedToSwapInto = undefined;
 
+seedValidationHandle = undefined;
+
 async function validateSeedLoop() {
     seedIsValidating = true;
-    var newSeed = await getNextSeed(getHtmlPageVidLink());
-    seedSwapAttempts++;
-    seedIsValidFromLoop = await verifySeedIsValid(newSeed);
-    if (seedIsValidFromLoop) {
-        seedToSwapInto = newSeed;
+    if (!seedIsValidating) {
+        var newSeed = await getNextSeed(getHtmlPageVidLink());
+        seedSwapAttempts++;
+        seedIsValidFromLoop = await verifySeedIsValid(newSeed);
+        if (seedIsValidFromLoop) {
+            seedToSwapInto = newSeed;
+            setHtmlPageSeed(seedToSwapInto);
+            plyr.play();
+            seedSwapAttempts = 0;
+        } else if (seedSwapAttempts >= 8) {
+            console.log('attempted to swap seed 8 times and failed, aborting');
+            plyr.pause();
+            seedSwapAttempts = 0;
+        }
+        clearInterval(seedValidationHandle);
+        seedIsValidating = false;
     }
-    seedIsValidating = false;
 }
 
 async function runOnInterval() {
@@ -105,21 +117,9 @@ async function runOnInterval() {
             if (bufferDelta > 8000) {
                 if (!seedSwapInProgress) {
                     seedSwapInProgress = true;
-                    seedIsValidFromLoop = await verifySeedIsValid(getHtmlPageSeed());
-                    while (!seedIsValidFromLoop && (seedSwapAttempts < 8)) {
-                        if (!seedIsValidating) {
-                            setTimeout(validateSeedLoop, 1500);
-                        }
+                    if (!seedIsValidating) {
+                        seedValidationHandle = setInterval(validateSeedLoop, 8000);
                     }
-                    if (seedSwapAttempts >= 8) {
-                        console.log('attempted to swap seed 8 times and failed, aborting');
-                        plyr.pause();
-                    }
-                    if (seedIsValidFromLoop && seedToSwapInto != undefined) {
-                        setHtmlPageSeed(seedToSwapInto);
-                        plyr.play();
-                    }
-                    seedSwapAttempts = 0;
                 }
             }
         } else {
