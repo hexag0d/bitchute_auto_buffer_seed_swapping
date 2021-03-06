@@ -101,14 +101,15 @@ async function validateSeedLoop() {
             plyr.play();
             seedSwapAttempts = 0;
             clearInterval(seedValidationHandle);
+            seedSwapInProgress = false;
         } else if (seedSwapAttempts >= 8) {
             console.log('attempted to swap seed 8 times and failed, aborting');
             plyr.pause();
             seedSwapAttempts = 0;
             clearInterval(seedValidationHandle);
+            seedSwapInProgress = false;
         }
         seedIsValidating = false;
-        seedSwapInProgress = false;
     }
 }
 
