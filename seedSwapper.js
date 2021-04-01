@@ -16,13 +16,6 @@ function getHtmlPageSeed() {
     return $('source')[0].src;
 }
 
-function setHtmlPageSeed(seedLink) {
-    $('source')[0].src = seedLink;
-}
-
-function getHtmlPageVidLink() {
-    return $('source')[0].src.split('.bitchute.com/')[1];
-}
 
 async function verifySeedIsValid(seedUrl, onInitialLoad) {
     if (onInitialLoad) {
@@ -42,13 +35,14 @@ async function verifySeedIsValid(seedUrl, onInitialLoad) {
     });
 }
 
-// Yes, I know this violates DRY
-// the issue is that some of the seeds now
-// do not contain the text 'seed' ... they are
-// a raw random character array
-// so these contain 'seed' because some of them will not
-// this is a prototype code file and every available seed
-// will need to be added by Rich or Ray
+function getHtmlPageVidLink() {
+    return $('source')[0].src.split('.bitchute.com/')[1];
+}
+
+function setHtmlPageSeed(seedLink) {
+    $('source')[0].src = seedLink;
+}
+
 var availableSeedArray = [
     'seed167',
     'seed126',
@@ -60,11 +54,24 @@ var availableSeedArray = [
     'seed125']
 
 // get a random seed so that we're not overloading any single one
-var seedArrayCurrentPosition = Math.floor(Math.random(availableSeedArray.length) * 10);
+var seedArrayCurrentPosition = 1;
+
+function getNewRandomSeed() {
+    seedArrayCurrentPosition = Math.floor(Math.random(availableSeedArray.length - 1) * 10);
+    return seedArrayCurrentPosition;
+}
+
+var newSeedVidLink = '';
 
 function getSeedSourceFromSeedNo(seedNo, vidLink) {
+    var vidLink = getHtmlPageVidLink()
+    var seedNo = availableSeedArray[getNewRandomSeed()];
+    newSeedVidLink = 'https://' + seedNo + '.bitchute.com/' + vidLink;
+    setHtmlPageSeed(newSeedVidLink);
     return 'https://' + seedNo + '.bitchute.com/' + vidLink;
 }
+
+var newSeed = availableSeedArray[seedArrayCurrentPosition]
 
 async function getNextSeed(vidLink) {
     var seedNo = availableSeedArray[seedArrayCurrentPosition];
