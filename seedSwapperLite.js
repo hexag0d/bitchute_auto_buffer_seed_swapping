@@ -1,13 +1,13 @@
-// JavaScript source code
-
 function getHtmlPageVidLink() {
     return $('source')[0].src.split('.bitchute.com/')[1];
 };
 
+var lastKnownCurrentTime = plyr.currentTime;
+
 function setHtmlPageSeed(seedLink) {
     $('source')[0].src = seedLink;
     $('video')[0].src = seedLink;
-    plyr.play();
+    plyr.play().then(() => { plyr.currentTime = lastKnownCurrentTime; })
 };
 
 availableSeedArray = [
@@ -50,7 +50,6 @@ function getSeedSourceFromSeedNo(seedNo, vidLink) {
     }
     newSeedVidLink = 'https://' + seedNo + '.bitchute.com/' + vidLink;
     setHtmlPageSeed(newSeedVidLink);
-    //plyr.play();
     return newSeedVidLink;
 };
 
